@@ -1,25 +1,44 @@
 package modules;
 
 import java.util.ArrayList;
+import promotii.PromotiiManager;
 
 public class Magazin {
+
     private ArrayList<Produs> produse = new ArrayList<>();
     private ArrayList<Client> clienti = new ArrayList<>();
+    private PromotiiManager promotiiManager; // Adăugat
 
+    // Constructor
+    public Magazin() {
+        this.produse = new ArrayList<>();
+        this.clienti = new ArrayList<>();
+        this.promotiiManager = new PromotiiManager(); // inițializare
+    }
+
+    // Getter pentru PromotiiManager
+    public PromotiiManager getPromotiiManager() {
+        return promotiiManager;
+    }
+
+    // Adaugă produs
     public void adaugaProdus(Produs produs) {
         produse.add(produs);
         System.out.println("Produsul " + produs.getDenumire() + " a fost adaugat la magazin");
     }
 
+    // Adaugă client
     public void adaugaClient(Client client) {
         clienti.add(client);
         System.out.println("Clientul " + client.getNume() + " a fost adaugat!");
     }
 
+    // Getter produse
     public ArrayList<Produs> getProduse() {
         return produse;
     }
 
+    // Getter clienti
     public ArrayList<Client> getClienti() {
         return clienti;
     }
@@ -37,6 +56,7 @@ public class Magazin {
         }
     }
 
+    // Afișează stocul unui produs
     public void afiseazaProdus(Produs produs) {
         if (produs.getStoc() >= 10) {
             System.out.println("Produsul este bine aprovizionat (10+ bucati)");

@@ -1,5 +1,6 @@
 package modules;
 
+import promotii.PromotiiManager;
 import java.util.Scanner;
 
 public class Menu {
@@ -16,12 +17,13 @@ public class Menu {
             afiseazaMenuOp();
             alegere = citesteInt("Alege o optiune: ");
             switch (alegere) {
-                case 1 : adaugaProdus();
-                case 2 : afiseazaProduse();
-                case 3 : adaugaClient();
-                case 4 : creeazaComanda();
-                case 0 : System.out.println("Iesire...");
-                default : System.out.println("Optiune invalida!");
+                case 1: adaugaProdus(); break;
+                case 2: afiseazaProduse(); break;
+                case 3: adaugaClient(); break;
+                case 4: creeazaComanda(); break;
+                case 5: meniuPromotii(); break;  // <<< NOU
+                case 0: System.out.println("Iesire..."); break;
+                default: System.out.println("Optiune invalida!");
             }
         } while (alegere != 0);
     }
@@ -32,9 +34,59 @@ public class Menu {
         System.out.println("2. Afiseaza produse");
         System.out.println("3. Adauga client");
         System.out.println("4. Creeaza comanda");
+        System.out.println("5. Produse promotionale");   // <<< NOU
         System.out.println("0. Iesire");
     }
 
+    // ==============================
+    //      PRODUSE PROMOTIONALE
+    // ==============================
+    private void meniuPromotii() {
+        PromotiiManager pm = magazin.getPromotiiManager();
+
+        System.out.println("\n=== MENIU PROMOTII ===");
+        System.out.println("1. Adauga produs in promotie");
+        System.out.println("2. Afiseaza produse promotionale");
+        System.out.println("0. Inapoi");
+
+        int opt = citesteInt("Alege optiunea:");
+
+        switch (opt) {
+            case 1: adaugaProdusInPromotie(); break;
+            case 2: pm.afiseazaProdusePromotii(); break;
+            case 0: return;
+            default: System.out.println("Optiune invalida!");
+        }
+    }
+
+    private void adaugaProdusInPromotie() {
+        magazin.afiseazaToateProdusele();
+        int index = citesteInt("Alege indexul produsului: ");
+
+        if (index < 1 || index > magazin.getProduse().size()) {
+            System.out.println("Index invalid!");
+            return;
+        }
+
+        Produs p = magazin.getProduse().get(index - 1);
+
+        double reducere = citesteDouble("Introdu reducerea (%): ");
+        double pretFinal = p.getPret() - (p.getPret() * reducere / 100);
+
+        System.out.println("\nProdus adaugat la promotii:");
+        System.out.println("Denumire: " + p.getDenumire());
+        System.out.println("Categorie: " + p.getCategorie());
+        System.out.println("Pret original: " + p.getPret());
+        System.out.println("Reducere: " + reducere + "%");
+        System.out.println("Pret final: " + pretFinal);
+        System.out.println("Stoc: " + p.getStoc());
+
+        magazin.getPromotiiManager().adaugaProdusLaPromotii(p);
+    }
+
+    // ==============================
+    //     METODE EXISTENTE
+    // ==============================
     private void adaugaProdus() {
         System.out.print("Numele produsului: ");
         String nume = scanner.nextLine();
@@ -48,7 +100,7 @@ public class Menu {
     }
 
     private void afiseazaProduse() {
-        magazin.afiseazaToateProdusele(); // asigură-te că această metodă există în Magazin
+        magazin.afiseazaToateProdusele();
     }
 
     private void adaugaClient() {
